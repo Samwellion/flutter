@@ -35,7 +35,7 @@ gradlePlugin {
 }
 
 tasks.withType<JavaCompile> {
-    options.release.set(11)
+    options.release.set(17)
 }
 
 tasks.test {
@@ -44,7 +44,55 @@ tasks.test {
 // https://stackoverflow.com/questions/55456176/unresolved-reference-compilekotlin-in-build-gradle-kts
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_11)
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
+}
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    `java-gradle-plugin`
+    groovy
+    `kotlin-dsl`
+    kotlin("jvm") version "1.9.20"
+}
+
+group = "dev.flutter.plugin"
+version = "1.0.0"
+
+// Optional: enable stricter validation, to ensure Gradle configuration is correct
+tasks.validatePlugins {
+    enableStricterValidation.set(true)
+}
+
+gradlePlugin {
+    plugins {
+        // The "flutterPlugin" name isn't used anywhere.
+        create("flutterPlugin") {
+            id = "dev.flutter.flutter-gradle-plugin"
+            implementationClass = "com.flutter.gradle.FlutterPlugin"
+        }
+        // The "flutterAppPluginLoaderPlugin" name isn't used anywhere.
+        create("flutterAppPluginLoaderPlugin") {
+            id = "dev.flutter.flutter-plugin-loader"
+            implementationClass = "com.flutter.gradle.FlutterAppPluginLoaderPlugin"
+        }
+    }
+}
+
+tasks.withType<JavaCompile> {
+    options.release.set(21)
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+// https://stackoverflow.com/questions/55456176/unresolved-reference-compilekotlin-in-build-gradle-kts
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
     }
 }
 
